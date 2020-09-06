@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController{
+class ViewController: UIViewController {
     
     // MARK: - IBOutlet
         
@@ -41,26 +41,11 @@ class ViewController: UIViewController{
             ["1", "2", "3", "×"],
             ["0", ".", "=", "÷"],
     ]
-        
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //showLabel.isHidden = true
-        calculatiorCollectionView.delegate = self
-        calculatiorCollectionView.dataSource = self
-        calculatiorCollectionView.register(CaluculatiorViewCell.self,forCellWithReuseIdentifier: "callId")
-        //caluculateHegihtConstraint.constant = view.frame.width * 1.4
-        caluculateHegihtConstraint.constant = view.frame.height * 0.6
-        calculatiorCollectionView.backgroundColor = .clear
-        calculatiorCollectionView.contentInset = .init(top: 0,left: 14,bottom: 0, right: 14)
-        
-        showLabel.text = "0"
-        formulaLabel.text = "0"
-        symbolLabel.text = ""
-        hiddenLabel.text = ""
-        
-        self.shoCount = 0
+        configureCollectionView()
+        configureLabels()
     }
     
     func clear() {
@@ -70,6 +55,29 @@ class ViewController: UIViewController{
         calculateStatus = .none
         formulaLabel.text = "0"
         hiddenLabel.text = ""
+        self.shoCount = 0
+    }
+}
+
+extension ViewController {
+    
+    private func configureCollectionView() {
+        calculatiorCollectionView.delegate = self
+        calculatiorCollectionView.dataSource = self
+        calculatiorCollectionView.register(CaluculatiorViewCell.self,forCellWithReuseIdentifier: "callId")
+        //caluculateHegihtConstraint.constant = view.frame.width * 1.4
+        caluculateHegihtConstraint.constant = view.frame.height * 0.6
+        calculatiorCollectionView.backgroundColor = .clear
+        calculatiorCollectionView.contentInset = .init(top: 0,left: 14,bottom: 0, right: 14)
+    }
+    
+    private func configureLabels() {
+        //showLabel.isHidden = true
+        showLabel.text = "0"
+        formulaLabel.text = "0"
+        symbolLabel.text = ""
+        hiddenLabel.text = ""
+        
         self.shoCount = 0
     }
 }
