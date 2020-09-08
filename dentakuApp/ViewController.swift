@@ -40,6 +40,14 @@ class ViewController: UIViewController {
     var resultNumber = 0
     var last : String = ""
     
+    // NOTE: 連続で数字が入力された場合の一つ前に入力された数字を保持する変数.
+    // ex) 96 の場合は 9 が入る.
+    var previousNumberString: String? {
+        didSet {
+            print("[DEBUG] previous number = \(previousNumberString ?? "nil")")
+        }
+    }
+    
     let numbers = [
             ["C", "%", "S", "De"],
             ["7", "8", "9", "+"],
@@ -163,13 +171,21 @@ extension ViewController {
                 // NOTE: 配列が 5 以上の長さ( 2回目の計算に入った )
                 // この場合 hiddenLabel に計算結果が入り、それを取り出すが、
                 // 2桁の場合前の計算結果をそのままにしたまま2桁入力後の数字を計算してしまうので良くない.
+                // 足算の場合は一つ前に入力された数字を引いて戻す処理が必要になる.
                 
                 // NOTE: 今までの計算結果
                 let aNumber: Int = Int(hiddenLabel.text ?? "0") ?? 0
                 // NOTE: 配列に入っている最後の数字
                 let bNumber: Int = Int(secondNumberrr) ?? 0
                 
-                self.resultNumber = aNumber + bNumber
+                // NOTE: `previousNumberString` があれば足算なので、マイナスして結果を整える.
+                // しかしこの場合全ての演算子において逆の操作( 乗算の場合は除算など )をする処理を書かなければならない.
+                if let previousNumberString = previousNumberString,
+                    let previousNumber = Int(previousNumberString) {
+                    self.resultNumber = aNumber - previousNumber + bNumber
+                } else {
+                    self.resultNumber = aNumber + bNumber
+                }
                 
                 print("resultNumberは\(self.resultNumber)")
                 
@@ -249,6 +265,9 @@ extension ViewController: UICollectionViewDelegate {
 
                     arrayCulc()
                 default: //配列の最後が数字だったら(数字をつづけて入力した場合）
+                    // NOTE: 配列の最後に残っている一つ前に入力された数字を保持して記憶する.
+                    previousNumberString = last
+                        
                     numberArray.removeLast()
                     numberArray.append(showNum)
 
@@ -320,6 +339,9 @@ extension ViewController: UICollectionViewDelegate {
             guard let last = numberArray.last else {
                 return
             }
+            
+            // NOTE: 演算子が入力されたら `previousNumberString` をリセット
+            previousNumberString = nil
             
             showLabel.isHidden = false
             showLabel.text = ""
