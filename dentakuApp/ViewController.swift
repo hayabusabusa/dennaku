@@ -34,6 +34,12 @@ class ViewController: UIViewController {
     var value3: NSDecimalNumber = 0
     var shoCount: Int  = 0
     
+    var numberArray = [String]()
+    var firstNumberrr = "0"
+    var secondNumberrr = "0"
+    var resultNumber = 0
+    var last : String = ""
+    
     let numbers = [
             ["C", "%", "S", "De"],
             ["7", "8", "9", "+"],
@@ -122,156 +128,54 @@ extension ViewController {
             formulaHiddenLabele.text = nowFormula  + send
         }
     }
+    
+    func arrayCulc() {
+        guard let symbol = symbolLabel.text else{
+            return
+        }
+    
+        let arrayCount = numberArray.count
+        
+        if arrayCount >= 3 && arrayCount < 5 {
+            print("firstNumberrrとsecondNumbeerは\(firstNumberrr)と\(secondNumberrr)")
            
-    func culc() {
-        guard let nowFormula = formulaHiddenLabele.text else {
-            return
-        }
-        
-        guard let showNum = showLabel.text else {
-            return
-        }
-        
-        guard let showHidden = hiddenLabel.text else {
-            return
-        }
-        
-        guard let nowCulc = symbolLabel.text else {
-            return
-        }
-        
-        print("nowFormula\(nowFormula) です")
-        print("showNumは\(showNum) です")
-        print("showHiddenは\(showHidden) です")
-                
-        if showHidden == "" {
-            let  showHidden = showNum
-            hiddenLabel.text = showHidden  //showラベルから隠れラベルの値を取得
-            print("showHiddenは\(showHidden) です")
-        } else {
-            let culSymbol = nowFormula.suffix(1)  //文字列の末尾を取得
-            self.value1 = NSDecimalNumber(string: showHidden)
-            self.value2 = NSDecimalNumber(string: showNum)
-            
-            print("value1は\(value1)")
-            print("value2は\(value2)")
-            print("culSymbol\(culSymbol)")
-            print("culSymbol\(nowCulc)")
-            
-            switch culSymbol{
+            switch symbol {
             case "+":
-                guard let showHidden = hiddenLabel.text else {
-                    return
-                }
+                let aNumber: Int = Int(firstNumberrr) ?? 0
+                let bNumber: Int = Int(secondNumberrr) ?? 0
+                self.resultNumber =  aNumber + bNumber
                 
-                value1 = value1.adding(value2)//計算結果がvalue１に代入
-                self.result = value1.stringValue
-                showLabel.text = result
-                hiddenLabel.text = result
-                //self.value1 = NSDecimalNumber(string: showHidden)
-                self.value1 = self.value3
-            case "-":
-                value1 = value1.subtracting(value2)
-                self.result = value1.stringValue
-                showLabel.text = result
-                hiddenLabel.text = result
-            case "×":
-                print(value1)
-                print(value2)
-                
-                value1 = value1.multiplying(by : value2)
-                self.result = value1.stringValue
-                showLabel.text = result
-                hiddenLabel.text = result
-            case "÷":
-                if value2 == 0 {
-                    viewDidLoad()
-                    showLabel.text = "Error"
-                } else {
-                    value1 = value1.dividing(by:value2)
-                    self.result = value1.stringValue
-                    showLabel.text = result
-                    hiddenLabel.text = result
-                }
+                print("resultNumberは\(self.resultNumber)")
+                hiddenLabel.text = String(self.resultNumber)
             default:
-                return
+                print("デフォルト")
             }
         }
-    }
     
-    func nweCulc() {
-        guard let nowFormula = formulaHiddenLabele.text else{
-            return
-        }
-        
-        guard let showNum = showLabel.text else{
-            return
-        }
-        
-        guard let showHidden = hiddenLabel.text else{
-            return
-        }
-        
-        guard let nowCulc = symbolLabel.text else{
-            return
-        }
-        
-        print("nowFormula\(nowFormula) です")
-        print("showNumは\(showNum) です")
-        print("showHiddenは\(showHidden) です")
-        
-        if showHidden == "" {
-            let  showHidden = showNum
-            self.value1 = NSDecimalNumber(string: showHidden)
+        if arrayCount >= 5 {
+            print("firstNumberrrとsecondNumbeerは\(firstNumberrr)と\(secondNumberrr)")
+            let aNumber = hiddenLabel.text
             
-            print("if文のvalue1は\(value1)")
-            print("value2は\(value2)")
-        } else {
-            self.value1 = NSDecimalNumber(string: showHidden)
-            print("else文のvalue1は\(value1)")
+            print("aNumberとsecondNumbeerは\(aNumber)と\(secondNumberrr)")
             
-            let culSymbol =  nowCulc //文字列の末尾を取得
-            self.value2 = NSDecimalNumber(string: showNum)
-                 
-            print("value2は\(value2)")
-            print("culSymbol\(culSymbol)")
-            print("culSymbol\(nowCulc)")
-            
-            switch culSymbol {
+            switch symbol {
             case "+":
-                self.value3 = value1.adding(value2)//計算結果がvalue１に代入
-                print("いいいvalue1は\(value1)")
-                                   
-                self.result = value3.stringValue
-                print("ressult\(result)")
-                print("あああvalue1は\(value1)")
-                print("value3は\(value3)")
-                                       
-                hiddenLabel.text = result
-            case "-":
-                value1 = value1.subtracting(value2)
-                self.result = value1.stringValue
-                hiddenLabel.text = result
-            case "×":
-                print(value1)
-                print(value2)
+                // NOTE: 配列が 5 以上の長さ( 2回目の計算に入った )
+                // この場合 hiddenLabel に計算結果が入り、それを取り出すが、
+                // 2桁の場合前の計算結果をそのままにしたまま2桁入力後の数字を計算してしまうので良くない.
                 
-                value1 = value1.multiplying(by : value2)
-                self.result = value1.stringValue
-                hiddenLabel.text = result
-            case "÷":
-                if value2 == 0 {
-                    viewDidLoad()
-                    showLabel.text = "Error"
-                } else {
-                    value1 = value1.dividing(by:value2)
-                    self.result = value1.stringValue
-                    showLabel.text = result
-                    hiddenLabel.text = result
-                               
-                }
+                // NOTE: 今までの計算結果
+                let aNumber: Int = Int(hiddenLabel.text ?? "0") ?? 0
+                // NOTE: 配列に入っている最後の数字
+                let bNumber: Int = Int(secondNumberrr) ?? 0
+                
+                self.resultNumber = aNumber + bNumber
+                
+                print("resultNumberは\(self.resultNumber)")
+                
+                hiddenLabel.text = String(self.resultNumber)
             default:
-                return
+                print("デフォルト")
             }
         }
     }
@@ -327,6 +231,36 @@ extension ViewController: UICollectionViewDelegate {
                 guard let showNum = showLabel.text else {
                     return
                 }
+                
+                guard let last = numberArray.last else {
+                    return
+                }
+                
+                print(last)
+                
+                switch last {
+                case "+", "-", "×", "÷": //配列の最後が記号だったら（３＋５）の５を入力した場合
+                    numberArray.append(senderNum)
+                    
+                    print(numberArray)
+                    
+                    secondNumberrr = numberArray.last ?? "0"
+                    print("secondNumberrrは\(secondNumberrr)")
+
+                    arrayCulc()
+                default: //配列の最後が数字だったら(数字をつづけて入力した場合）
+                    numberArray.removeLast()
+                    numberArray.append(showNum)
+
+                    secondNumberrr = numberArray.last ?? "0"
+
+                    arrayCulc()
+                    
+                    print("最後の数字は\(last)")
+                    print(numberArray)
+                    print("secondNumberrrは\(secondNumberrr)")
+                    print("aaaaa")
+                }
             } else if showNum == "0" { //ラベルが０だったら
                 showLabel.text = senderNum
                 self.shoCount = showNum.count
@@ -339,11 +273,30 @@ extension ViewController: UICollectionViewDelegate {
                 let hidden = showLabel.text
                 hiddenLabel.text = hidden
                             
-                nweCulc()
+                numberArray.append(senderNum)
+                
+                print(numberArray)
+                
+                firstNumberrr = numberArray[0]
+                
+                print("firstNumberrrdは\(firstNumberrr)")
             } else {  //0じゃなくて数字が入力されたら
                 showLabel.text = showNum + senderNum
                 formulaLabel.text = showNum + senderNum
                 showLabel.isHidden = false
+                
+                guard let last = numberArray.last else {
+                    return
+                }
+                
+                print("最後の数字は\(last)")
+
+                numberArray.removeLast()
+                numberArray.append(showNum + senderNum)
+                
+                print(numberArray)
+                firstNumberrr = numberArray[0]
+                print("firstNumberrrdは\(firstNumberrr)")
                 
                 guard let showNum = showLabel.text else{ //
                     return
@@ -352,17 +305,10 @@ extension ViewController: UICollectionViewDelegate {
                 self.shoCount = showNum.count
                 
                 print("shoCount\(shoCount)")
-                
-                let hidden = showLabel.text
-                hiddenLabel.text = hidden
-                            
-                nweCulc()
-                            
             }
             
             if nowFormula != "0" {
                 formulaLabel.text = nowFormula + number
-                nweCulc()
             }
                            
             if nowFormula.contains("=") {
@@ -371,34 +317,39 @@ extension ViewController: UICollectionViewDelegate {
                 hiddenLabel.text = ""
             }
         case "+", "-", "×", "÷":
-            guard let nowFormula = formulaLabel.text else {
-                return
-            }
-            
-            guard let showNum = showLabel.text else {
+            guard let last = numberArray.last else {
                 return
             }
             
             showLabel.isHidden = false
             showLabel.text = ""
-                           
-            //if nowFormula.contains("=") {
-                // formulaLabel.text = showNum
-            //}
             
             let senderdCulc = number
+
+            switch last {
+            case "+", "-", "×", "÷":
+                numberArray.removeLast()
+                numberArray.append(senderdCulc)
+                print(numberArray)
+            default:
+                numberArray.append(senderdCulc)
+                print("最後の数字は\(last)")
+                print(numberArray)
+
+            }
             formulaControl(send: senderdCulc) //記号を引数にしたメソッド
             //let hidden = showLabel.text
             //hiddenLabel.text = hidden
             symbolLabel.text = number
         case "C":
-            showLabel.text = ""
+            showLabel.text = "0"
             formulaLabel.text = "0"
             symbolLabel.text = ""
             self.result = ""
-            hiddenLabel.text = self.result
+            //hiddenLabel.text = self.result
             formulaHiddenLabele.text = ""
             value1 = 0
+            numberArray.removeAll()
         case "De":
             guard let showNum = showLabel.text else{
                 return
@@ -429,7 +380,7 @@ extension ViewController: UICollectionViewDelegate {
                 }
             }
         case "=":
-            guard let nowFormula1 = formulaLabel.text else{
+            guard let nowFormula1 = formulaLabel.text else {
                 return
             }
             
@@ -454,7 +405,7 @@ extension ViewController: UICollectionViewDelegate {
                 
                 formulaLabel.text = nowFormula + "=" + self.result
                 self.aaa = formulaLabel.text ?? ""
-                hiddenLabel.text = self.result
+                //hiddenLabel.text = self.result
             }
         default:
             print("")
